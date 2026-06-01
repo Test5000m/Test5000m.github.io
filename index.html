@@ -1,31 +1,110 @@
-        <!DOCTYPE html>
-        <html lang="fa" dir="rtl">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>سرور ماینکرفت من</title>
-            <style>
-                body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background-color: #f0f2f5;
-                    color: #333;
-                    text-align: center;
-                    padding: 50px 20px;
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول رنکینگ</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: 30px auto; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; color: #1a73e8; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 15px; text-align: center; border-bottom: 1px solid #ddd; }
+        th { background-color: #e8f0fe; color: #1a73e8; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f3f4; }
+        .rank-bronze { color: #cd7f32; font-weight: bold; }
+        .rank-silver { color: #c0c0c0; font-weight: bold; }
+        .rank-gold { color: #ffd700; font-weight: bold; }
+        .rank-platinum { color: #e5e4e2; font-weight: bold; }
+        .rank-diamond { color: #4361ee; font-weight: bold; }
+        .rank-master { color: #ff00ff; font-weight: bold; }
+        .loading, .error { text-align: center; padding: 20px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>جدول رده‌بندی بازیکنان</h1>
+        <div id="leaderboardTable">
+            <p class="loading">در حال بارگذاری جدول رده‌بندی...</p>
+        </div>
+    </div>
+
+    <script>
+        // آدرس JSONbin.io که فایل ranks.json رو اونجا آپلود کردید
+        // حتماً این URL رو با URL خودتون جایگزین کنید!
+        const JSON_BIN_URL = 'YOUR_JSON_BIN_URL_HERE'; // مثال: 'https://api.jsonbin.io/v3/b/60f4d3e3d3e3e3e3e3e3e3e3'
+
+        async function fetchLeaderboard() {
+            const leaderboardDiv = document.getElementById('leaderboardTable');
+            try {
+                const response = await fetch(JSON_BIN_URL, {
+                    method: 'GET',
+                    headers: {
+                        // اگر JSONbin نیاز به کلید API داشت، اینجا اضافه کنید
+                        // 'X-Master-Key': '$2b$10$...'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                h1 {
-                    color: #1a73e8; /* رنگ آبی گوگل */
-                    margin-bottom: 20px;
+
+                const data = await response.json();
+
+                // فرض می‌کنیم داده‌ها در data.record (یا data.metadata.id) باشند، بسته به ساختار JSONbin
+                const usersData = data.record || data; // بسته به ساختار JSONbin ممکنه data.record باشه یا خود data
+
+                if (!usersData || typeof usersData !== 'object' || Object.keys(usersData).length === 0) {
+                     leaderboardDiv.innerHTML = '<p class="error">داده‌ای برای نمایش یافت نشد.</p>';
+                     return;
                 }
-                p {
-                    font-size: 1.1em;
-                    line-height: 1.6;
+
+                // تبدیل داده‌ها به فرمت جدول رده‌بندی
+                const leaderboard = [];
+                // چون داده‌های ما user_id به عنوان کلید دارند، باید تبدیل کنیم
+                for (const userId in usersData) {
+                    if (usersData.hasOwnProperty(userId)) {
+                        const userData = usersData[userId];
+                        leaderboard.push({
+                            user_id: userId,
+                            score: userData.score,
+                            rank_name: userData.rank
+                        });
+                    }
                 }
-            </style>
-        </head>
-        <body>
-            <h1>به سرور ماینکرفت من خوش آمدید!</h1>
-            <p>این صفحه محل معرفی سرور، قوانین، و اطلاعات مربوط به آن است.</p>
-            <p>به زودی جزئیات بیشتری اضافه خواهد شد.</p>
-            <p><em>با تشکر از همراهی شما!</em></p>
-        </body>
-        </html>
+
+                // مرتب‌سازی بر اساس امتیاز
+                leaderboard.sort((a, b) => b.score - a.score);
+
+                // ساخت جدول HTML
+                let tableHtml = '<table>';
+                tableHtml += '<thead><tr><th>رتبه</th><th>نام کاربری</th><th>امتیاز</th><th>رنک</th></tr></thead>';
+                tableHtml += '<tbody>';
+
+                leaderboard.forEach((entry, index) => {
+                    const rankClass = `rank-${entry.rank_name.toLowerCase()}`;
+                    tableHtml += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${entry.user_id}</td>
+                            <td>${entry.score}</td>
+                            <td class="${rankClass}">${entry.rank_name}</td>
+                        </tr>
+                    `;
+                });
+
+                tableHtml += '</tbody></table>';
+                leaderboardDiv.innerHTML = tableHtml;
+
+            } catch (error) {
+                console.error("Error fetching leaderboard:", error);
+                leaderboardDiv.innerHTML = `<p class="error">خطا در بارگذاری جدول: ${error.message}</p>`;
+            }
+        }
+
+        // بارگذاری جدول هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', fetchLeaderboard);
+    </script>
+</body>
+</html>
