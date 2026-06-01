@@ -284,17 +284,3 @@ justify-content:center;
 }
 
 }
-.card img{
-width:96px;
-height:96px;
-object-fit:contain;
-margin-bottom:15px;
-image-rendering:pixelated;
-}
-
-.category-title{
-margin:60px 0 25px;
-font-size:28px;
-color:#00ffcc;
-text-align:center;
-}
