@@ -1,163 +1,100 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LegendCraft Store</title>
-
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<div class="bg-animation"></div>
-
-<header>
-  <div class="logo">LEGENDCRAFT</div>
-
-  <nav>
-    <a href="#home">خانه</a>
-    <a href="#ranks">رنک ها</a>
-    <a href="#items">آیتم ها</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-
-  <div class="cart">
-    🛒 <span id="cartCount">0</span>
-  </div>
-</header>
-
-<section class="hero" id="home">
-
-  <h1>بهترین سرور ماینکرافت فارسی</h1>
-
-  <p>
-    خرید رنک، کلید، کوین و آیتم های اختصاصی
-  </p>
-
-  <a href="#ranks" class="hero-btn">
-    شروع خرید
-  </a>
-
-</section>
-
-<section id="ranks">
-
-  <h2>رنک های ویژه</h2>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>VIP</h3>
-      <p>دسترسی ویژه</p>
-      <span>99 T</span>
-      <button onclick="addCart('VIP')">خرید</button>
-    </div>
-
-    <div class="card">
-      <h3>MVP</h3>
-      <p>پرواز + کیت</p>
-      <span>199 T</span>
-      <button onclick="addCart('MVP')">خرید</button>
-    </div>
-
-    <div class="card">
-      <h3>ELITE</h3>
-      <p>کلید رایگان</p>
-      <span>299 T</span>
-      <button onclick="addCart('ELITE')">خرید</button>
-    </div>
-
-    <div class="card legend">
-      <h3>LEGEND</h3>
-      <p>تمام امکانات</p>
-      <span>499 T</span>
-      <button onclick="addCart('LEGEND')">خرید</button>
-    </div>
-
-  </div>
-
-</section>
-
 <section id="items">
 
-  <h2>آیتم های محبوب</h2>
+```
+<h2>فروشگاه آیتم‌ها</h2>
 
-  <div class="grid">
+<!-- بدوارز -->
+<h3 class="category-title">🔥 آیتم‌های BedWars</h3>
+
+<div class="grid">
 
     <div class="card">
-      <h3>Diamond Kit</h3>
-      <span>59 T</span>
-      <button onclick="addCart('Diamond Kit')">خرید</button>
+        <img src="assets/items/fireball.png" alt="Fireball">
+        <h3>Fireball</h3>
+        <p>گلوله آتشین انفجاری</p>
+        <span>49 T</span>
+        <button onclick="addCart('Fireball')">خرید</button>
     </div>
 
     <div class="card">
-      <h3>Netherite Kit</h3>
-      <span>129 T</span>
-      <button onclick="addCart('Netherite Kit')">خرید</button>
+        <img src="assets/items/tnt.png" alt="TNT">
+        <h3>TNT</h3>
+        <p>مناسب تخریب Bed</p>
+        <span>79 T</span>
+        <button onclick="addCart('TNT')">خرید</button>
     </div>
 
     <div class="card">
-      <h3>Spawner Pack</h3>
-      <span>149 T</span>
-      <button onclick="addCart('Spawner Pack')">خرید</button>
+        <img src="assets/items/ender_pearl.png" alt="Ender Pearl">
+        <h3>Ender Pearl</h3>
+        <p>تلپورت سریع</p>
+        <span>25 T</span>
+        <button onclick="addCart('Ender Pearl')">خرید</button>
+    </div>
+
+</div>
+
+<!-- سروایوال -->
+<h3 class="category-title">⛏️ آیتم‌های Survival</h3>
+
+<div class="grid">
+
+    <div class="card">
+        <img src="assets/items/netherite_sword.png" alt="Netherite Sword">
+        <h3>Netherite Sword</h3>
+        <p>Sharpness V</p>
+        <span>299 T</span>
+        <button onclick="addCart('Netherite Sword')">خرید</button>
     </div>
 
     <div class="card">
-      <h3>Crate Keys</h3>
-      <span>39 T</span>
-      <button onclick="addCart('Crate Keys')">خرید</button>
+        <img src="assets/items/netherite_armor.png" alt="Netherite Armor">
+        <h3>Netherite Armor</h3>
+        <p>Protection IV</p>
+        <span>699 T</span>
+        <button onclick="addCart('Netherite Armor')">خرید</button>
     </div>
 
-  </div>
+    <div class="card">
+        <img src="assets/items/elytra.png" alt="Elytra">
+        <h3>Elytra</h3>
+        <p>پرواز در جهان</p>
+        <span>499 T</span>
+        <button onclick="addCart('Elytra')">خرید</button>
+    </div>
+
+</div>
+
+<!-- تجارت -->
+<h3 class="category-title">💰 آیتم‌های Economy / Trade</h3>
+
+<div class="grid">
+
+    <div class="card">
+        <img src="assets/items/money_voucher.png" alt="Money Voucher">
+        <h3>Money Voucher</h3>
+        <p>100,000 Coins</p>
+        <span>99 T</span>
+        <button onclick="addCart('Money Voucher')">خرید</button>
+    </div>
+
+    <div class="card">
+        <img src="assets/items/diamond_block.png" alt="Diamond Block Pack">
+        <h3>Diamond Pack</h3>
+        <p>64 Diamond Blocks</p>
+        <span>149 T</span>
+        <button onclick="addCart('Diamond Pack')">خرید</button>
+    </div>
+
+    <div class="card">
+        <img src="assets/items/beacon.png" alt="Beacon">
+        <h3>Beacon</h3>
+        <p>آیتم کمیاب تجاری</p>
+        <span>399 T</span>
+        <button onclick="addCart('Beacon')">خرید</button>
+    </div>
+
+</div>
+```
 
 </section>
-
-<section class="stats">
-
-  <div>
-    <h3>528</h3>
-    <p>بازیکن آنلاین</p>
-  </div>
-
-  <div>
-    <h3>25K+</h3>
-    <p>خرید موفق</p>
-  </div>
-
-  <div>
-    <h3>12K+</h3>
-    <p>عضو دیسکورد</p>
-  </div>
-
-</section>
-
-<section id="faq">
-
-  <h2>سوالات متداول</h2>
-
-  <div class="faq-box">
-    <h4>آیتم ها چگونه تحویل می شوند؟</h4>
-    <p>به صورت خودکار داخل بازی.</p>
-  </div>
-
-  <div class="faq-box">
-    <h4>پرداخت امن است؟</h4>
-    <p>بله.</p>
-  </div>
-
-</section>
-
-<footer>
-
-  <h3>LegendCraft Network</h3>
-
-  <p>play.legendcraft.net</p>
-
-</footer>
-
-<script src="script.js"></script>
-
-</body>
-</html>
