@@ -1,49 +1,28 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه رنک و آیتم</title>
-    <!-- Link to your CSS file -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-    <!-- Axios for HTTP requests -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1>فروشگاه</h1>
+// Function to fetch and display items
+function loadItems() {
+    const itemsRef = database.ref('products/items');
+    itemsRef.on('value', (snapshot) => {
+        // Check if snapshot has data before clearing and appending
+        if (snapshot.exists()) {
+            itemsListDiv.innerHTML = ''; // Clear loading message ONLY if data exists
+            snapshot.forEach((childSnapshot) => {
+                const item = childSnapshot.val();
+                const itemId = childSnapshot.key;
 
-        <div class="product-section">
-            <h2>انتخاب رنک</h2>
-            <div id="ranks-list">
-                <!-- Ranks will be loaded here by JavaScript -->
-                <p>در حال بارگذاری رنک‌ها...</p>
-            </div>
-        </div>
-
-        <div class="product-section">
-            <h2>انتخاب آیتم</h2>
-            <div id="items-list">
-                <!-- Items will be loaded here by JavaScript -->
-                <p>در حال بارگذاری آیتم‌ها...</p>
-            </div>
-        </div>
-
-        <div class="cart-section">
-            <h2>سبد خرید</h2>
-            <ul id="cart-items">
-                <!-- Cart items will be displayed here -->
-                <li>سبد خرید شما خالی است.</li>
-            </ul>
-            <p>مبلغ کل: <span id="total-price">0</span> تومان</p>
-            <button id="checkout-button" disabled>پرداخت</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                const itemElement = document.createElement('div');
+                itemElement.className = 'product-card';
+                itemElement.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>${item.price.toLocaleString()} تومان</p>
+                    <button onclick="addItem('${itemId}', '${item.name}', ${item.price})">اضافه کردن</button>
+                `;
+                itemsListDiv.appendChild(itemElement);
+            });
+        } else {
+            itemsListDiv.innerHTML = '<p>آیتمی برای نمایش وجود ندارد.</p>'; // Message if no items found
+        }
+    }, (error) => {
+        console.error("Error loading items:", error);
+        itemsListDiv.innerHTML = '<p>خطا در بارگذاری آیتم‌ها.</p>';
+    });
+}
