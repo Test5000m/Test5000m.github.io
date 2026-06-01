@@ -1,110 +1,471 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول رنکینگ</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; padding: 20px; }
-        .container { max-width: 800px; margin: 30px auto; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; color: #1a73e8; margin-bottom: 25px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px 15px; text-align: center; border-bottom: 1px solid #ddd; }
-        th { background-color: #e8f0fe; color: #1a73e8; font-weight: bold; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1f3f4; }
-        .rank-bronze { color: #cd7f32; font-weight: bold; }
-        .rank-silver { color: #c0c0c0; font-weight: bold; }
-        .rank-gold { color: #ffd700; font-weight: bold; }
-        .rank-platinum { color: #e5e4e2; font-weight: bold; }
-        .rank-diamond { color: #4361ee; font-weight: bold; }
-        .rank-master { color: #ff00ff; font-weight: bold; }
-        .loading, .error { text-align: center; padding: 20px; color: #666; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فروشگاه رنک‌ها</title>
+  <style>
+    :root{
+      --bg1:#0f1226;
+      --bg2:#171b38;
+      --card:#1f2447;
+      --card2:#252b56;
+      --text:#f2f4ff;
+      --muted:#b7bddb;
+      --primary:#6c8cff;
+      --primary2:#8b5cf6;
+      --success:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family: Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(108,140,255,.18), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(139,92,246,.16), transparent 30%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      color:var(--text);
+      min-height:100vh;
+      padding:24px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      padding:40px 20px 28px;
+      margin-bottom:24px;
+    }
+
+    .hero h1{
+      font-size:clamp(2rem, 4vw, 3.5rem);
+      margin-bottom:12px;
+      letter-spacing:-.5px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.9;
+      max-width:850px;
+      margin:0 auto;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:16px;
+      margin:20px 0 30px;
+    }
+
+    .stat{
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:18px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat h3{
+      font-size:1.8rem;
+      margin-bottom:6px;
+      color:#fff;
+    }
+
+    .stat span{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .section-title{
+      font-size:1.4rem;
+      margin:30px 0 16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:18px;
+    }
+
+    .rank-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease;
+      position:relative;
+    }
+
+    .rank-card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 30px 70px rgba(0,0,0,.45);
+    }
+
+    .rank-badge{
+      padding:16px;
+      font-weight:bold;
+      font-size:1.1rem;
+      text-align:center;
+      color:#fff;
+      background:linear-gradient(135deg, var(--primary), var(--primary2));
+    }
+
+    .rank-card.bronze .rank-badge{ background:linear-gradient(135deg,#b87333,#8c5a2b); }
+    .rank-card.silver .rank-badge{ background:linear-gradient(135deg,#c0c0c0,#8b8b8b); }
+    .rank-card.gold .rank-badge{ background:linear-gradient(135deg,#ffd700,#d4a900); color:#1a1a1a; }
+    .rank-card.platinum .rank-badge{ background:linear-gradient(135deg,#66d9ef,#2b8aa3); }
+    .rank-card.diamond .rank-badge{ background:linear-gradient(135deg,#7dd3fc,#2563eb); }
+    .rank-card.master .rank-badge{ background:linear-gradient(135deg,#f472b6,#7c3aed); }
+
+    .rank-body{
+      padding:18px;
+    }
+
+    .price{
+      font-size:1.5rem;
+      font-weight:bold;
+      margin-bottom:10px;
+      color:#fff;
+    }
+
+    .desc{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:14px;
+      min-height:60px;
+    }
+
+    .features{
+      list-style:none;
+      margin-bottom:16px;
+    }
+
+    .features li{
+      margin-bottom:8px;
+      color:#e8ebff;
+      font-size:.95rem;
+    }
+
+    .features li::before{
+      content:"✓";
+      color:var(--success);
+      margin-left:8px;
+      font-weight:bold;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:13px 16px;
+      font-size:1rem;
+      font-weight:bold;
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .btn-buy{
+      background:linear-gradient(135deg, var(--primary), var(--primary2));
+      color:white;
+    }
+
+    .btn-buy:hover{
+      filter:brightness(1.08);
+      transform:translateY(-1px);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      margin-top:10px;
+      border:1px solid var(--border);
+    }
+
+    .btn-secondary:hover{
+      background:rgba(255,255,255,.12);
+    }
+
+    .cart{
+      margin-top:36px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+
+    .cart h2{
+      margin-bottom:14px;
+    }
+
+    .cart-item{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 0;
+      border-bottom:1px solid var(--border);
+      color:var(--muted);
+    }
+
+    .cart-item strong{
+      color:var(--text);
+    }
+
+    .cart-empty{
+      color:var(--muted);
+      padding:10px 0;
+    }
+
+    .total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:16px;
+      padding-top:16px;
+      border-top:1px solid var(--border);
+      font-size:1.1rem;
+    }
+
+    .total strong{
+      color:#fff;
+      font-size:1.25rem;
+    }
+
+    .notice{
+      margin-top:24px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(245,158,11,.12);
+      border:1px solid rgba(245,158,11,.25);
+      color:#fde68a;
+      line-height:1.8;
+    }
+
+    .footer{
+      text-align:center;
+      margin:28px 0 10px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    @media (max-width: 640px){
+      body{ padding:14px; }
+      .hero{ padding:24px 10px; }
+      .rank-body{ padding:16px; }
+      .cart-item{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>جدول رده‌بندی بازیکنان</h1>
-        <div id="leaderboardTable">
-            <p class="loading">در حال بارگذاری جدول رده‌بندی...</p>
-        </div>
+  <div class="container">
+    <section class="hero">
+      <h1>فروشگاه رنک‌های گیمینگ</h1>
+      <p>
+        انتخاب رنک دلخواهت با قیمت شفاف، توضیحات دقیق و تجربه‌ای سریع و مدرن.
+        این نسخه برای نمایش، تست و شروع پروژه عالیه.
+      </p>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <h3>6</h3>
+        <span>رنک فعال</span>
+      </div>
+      <div class="stat">
+        <h3 id="totalSales">0</h3>
+        <span>خرید ثبت‌شده محلی</span>
+      </div>
+      <div class="stat">
+        <h3>24/7</h3>
+        <span>دسترسی آنلاین</span>
+      </div>
+      <div class="stat">
+        <h3>Fast</h3>
+        <span>رابط کاربری سبک</span>
+      </div>
+    </section>
+
+    <h2 class="section-title">رنک‌ها و قیمت‌ها</h2>
+    <section class="grid" id="ranksGrid"></section>
+
+    <section class="cart">
+      <h2>سبد خرید موقت</h2>
+      <div id="cartItems"></div>
+      <div class="total">
+        <span>مجموع:</span>
+        <strong id="cartTotal">0 تومان</strong>
+      </div>
+      <button class="btn btn-secondary" onclick="clearCart()">پاک کردن سبد خرید</button>
+    </section>
+
+    <div class="notice">
+      <strong>توجه:</strong> این صفحه فقط بخش فرانت‌اند و نمایشی است. برای پرداخت واقعی، تأیید تراکنش و تغییر امن رنک،
+      باید بک‌اند یا سرویس Serverless اضافه شود.
     </div>
 
-    <script>
-        // آدرس JSONbin.io که فایل ranks.json رو اونجا آپلود کردید
-        // حتماً این URL رو با URL خودتون جایگزین کنید!
-        const JSON_BIN_URL = 'YOUR_JSON_BIN_URL_HERE'; // مثال: 'https://api.jsonbin.io/v3/b/60f4d3e3d3e3e3e3e3e3e3e3'
+    <div class="footer">
+      ساخته شده برای GitHub Pages — نسخه پیشرفته‌ی نمایشی
+    </div>
+  </div>
 
-        async function fetchLeaderboard() {
-            const leaderboardDiv = document.getElementById('leaderboardTable');
-            try {
-                const response = await fetch(JSON_BIN_URL, {
-                    method: 'GET',
-                    headers: {
-                        // اگر JSONbin نیاز به کلید API داشت، اینجا اضافه کنید
-                        // 'X-Master-Key': '$2b$10$...'
-                    }
-                });
+  <script>
+    const ranks = [
+      {
+        id: "bronze",
+        name: "Bronze",
+        price: 50000,
+        desc: "مناسب شروع سریع با ظاهر ساده و اقتصادی.",
+        features: ["ورود به سیستم رنک", "قیمت اقتصادی", "مناسب تست"],
+      },
+      {
+        id: "silver",
+        name: "Silver",
+        price: 100000,
+        desc: "متعادل، محبوب و مناسب بازیکنان معمولی.",
+        features: ["تعادل قیمت و ارزش", "پشتیبانی بهتر", "رنک کلاسیک"],
+      },
+      {
+        id: "gold",
+        name: "Gold",
+        price: 180000,
+        desc: "سطح طلایی برای کسانی که می‌خواهند جدی‌تر دیده شوند.",
+        features: ["ظاهر جذاب‌تر", "اعتبار بیشتر", "محبوب بین پلیرها"],
+      },
+      {
+        id: "platinum",
+        name: "Platinum",
+        price: 280000,
+        desc: "رنکی حرفه‌ای با حس لوکس و قدرتمند.",
+        features: ["ظاهر حرفه‌ای", "ویژه پلیرهای فعال", "سطح بالاتر"],
+      },
+      {
+        id: "diamond",
+        name: "Diamond",
+        price: 450000,
+        desc: "برای بازیکن‌هایی که می‌خواهند متمایز باشند.",
+        features: ["جلوه ویژه", "رنک کمیاب‌تر", "ویژگی‌های خاص"],
+      },
+      {
+        id: "master",
+        name: "Master",
+        price: 700000,
+        desc: "نهایت سطح در این فروشگاه نمایشی؛ مخصوص حرفه‌ای‌ها.",
+        features: ["بالاترین سطح", "نمایش ویژه", "پرستیژ بالا"],
+      }
+    ];
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const salesCount = Number(localStorage.getItem("salesCount") || 0);
 
-                const data = await response.json();
+    function formatPrice(price){
+      return price.toLocaleString("fa-IR") + " تومان";
+    }
 
-                // فرض می‌کنیم داده‌ها در data.record (یا data.metadata.id) باشند، بسته به ساختار JSONbin
-                const usersData = data.record || data; // بسته به ساختار JSONbin ممکنه data.record باشه یا خود data
+    function renderRanks(){
+      const grid = document.getElementById("ranksGrid");
+      grid.innerHTML = ranks.map(rank => `
+        <article class="rank-card ${rank.id}">
+          <div class="rank-badge">${rank.name}</div>
+          <div class="rank-body">
+            <div class="price">${formatPrice(rank.price)}</div>
+            <div class="desc">${rank.desc}</div>
+            <ul class="features">
+              ${rank.features.map(f => `<li>${f}</li>`).join("")}
+            </ul>
+            <button class="btn btn-buy" onclick="buyRank('${rank.id}')">خرید ${rank.name}</button>
+          </div>
+        </article>
+      `).join("");
+    }
 
-                if (!usersData || typeof usersData !== 'object' || Object.keys(usersData).length === 0) {
-                     leaderboardDiv.innerHTML = '<p class="error">داده‌ای برای نمایش یافت نشد.</p>';
-                     return;
-                }
+    function saveCart(){
+      localStorage.setItem("cart", JSON.stringify(cart));
+      localStorage.setItem("salesCount", String(Number(localStorage.getItem("salesCount") || 0)));
+    }
 
-                // تبدیل داده‌ها به فرمت جدول رده‌بندی
-                const leaderboard = [];
-                // چون داده‌های ما user_id به عنوان کلید دارند، باید تبدیل کنیم
-                for (const userId in usersData) {
-                    if (usersData.hasOwnProperty(userId)) {
-                        const userData = usersData[userId];
-                        leaderboard.push({
-                            user_id: userId,
-                            score: userData.score,
-                            rank_name: userData.rank
-                        });
-                    }
-                }
+    function buyRank(rankId){
+      const rank = ranks.find(r => r.id === rankId);
+      if(!rank) return;
 
-                // مرتب‌سازی بر اساس امتیاز
-                leaderboard.sort((a, b) => b.score - a.score);
+      cart.push({
+        id: rank.id,
+        name: rank.name,
+        price: rank.price,
+        time: new Date().toLocaleString("fa-IR")
+      });
 
-                // ساخت جدول HTML
-                let tableHtml = '<table>';
-                tableHtml += '<thead><tr><th>رتبه</th><th>نام کاربری</th><th>امتیاز</th><th>رنک</th></tr></thead>';
-                tableHtml += '<tbody>';
+      localStorage.setItem("cart", JSON.stringify(cart));
 
-                leaderboard.forEach((entry, index) => {
-                    const rankClass = `rank-${entry.rank_name.toLowerCase()}`;
-                    tableHtml += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${entry.user_id}</td>
-                            <td>${entry.score}</td>
-                            <td class="${rankClass}">${entry.rank_name}</td>
-                        </tr>
-                    `;
-                });
+      let salesCountNow = Number(localStorage.getItem("salesCount") || 0);
+      salesCountNow++;
+      localStorage.setItem("salesCount", String(salesCountNow));
 
-                tableHtml += '</tbody></table>';
-                leaderboardDiv.innerHTML = tableHtml;
+      document.getElementById("totalSales").textContent = salesCountNow;
+      renderCart();
 
-            } catch (error) {
-                console.error("Error fetching leaderboard:", error);
-                leaderboardDiv.innerHTML = `<p class="error">خطا در بارگذاری جدول: ${error.message}</p>`;
-            }
-        }
+      alert(`رنک ${rank.name} به سبد خرید اضافه شد.`);
+    }
 
-        // بارگذاری جدول هنگام بارگذاری صفحه
-        document.addEventListener('DOMContentLoaded', fetchLeaderboard);
-    </script>
+    function renderCart(){
+      const cartItems = document.getElementById("cartItems");
+      const totalEl = document.getElementById("cartTotal");
+
+      if(cart.length === 0){
+        cartItems.innerHTML = `<div class="cart-empty">سبد خرید فعلاً خالی است.</div>`;
+        totalEl.textContent = "0 تومان";
+        return;
+      }
+
+      let total = 0;
+
+      cartItems.innerHTML = cart.map((item, index) => {
+        total += item.price;
+        return `
+          <div class="cart-item">
+            <div>
+              <strong>${index + 1}. ${item.name}</strong><br>
+              <small>${item.time}</small>
+            </div>
+            <div>${formatPrice(item.price)}</div>
+          </div>
+        `;
+      }).join("");
+
+      totalEl.textContent = formatPrice(total);
+    }
+
+    function clearCart(){
+      cart.length = 0;
+      localStorage.removeItem("cart");
+      renderCart();
+    }
+
+    document.getElementById("totalSales").textContent = salesCount;
+    renderRanks();
+    renderCart();
+  </script>
 </body>
 </html>
