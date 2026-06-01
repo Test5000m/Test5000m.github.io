@@ -1,98 +1,366 @@
-// --- تنظیمات اولیه ---
-const itemsListDiv = document.getElementById('items-list');
-const ranksListDiv = document.getElementById('ranks-list');
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 
-// --- تابع برای نمایش قیمت با فرمت تومان ---
-function formatPrice(price) {
-    return price.toLocaleString('fa-IR') + ' تومان'; // استفاده از 'fa-IR' برای فرمت فارسی
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegendCraft Store</title>
 
-// --- تابع برای نمایش آیتم‌ها (شامل رنک‌ها و آیتم‌های دیگر) ---
-function loadProductSection(refPath, targetDiv, productType) {
-    const productRef = database.ref(refPath);
-    const loadingDiv = targetDiv.querySelector('.loading-message');
-    if (loadingDiv) loadingDiv.remove(); // حذف پیام بارگذاری اولیه
+    <meta name="description" content="فروش رنک، آیتم، کوین و کلیدهای سرور ماینکرافت">
 
-    console.log(`Fetching data from: ${refPath}`);
+    <link rel="stylesheet" href="style.css">
 
-    productRef.on('value', (snapshot) => {
-        console.log(`Data received for ${refPath}. Exists: ${snapshot.exists()}`);
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        if (snapshot.exists()) {
-            targetDiv.innerHTML = ''; // پاک کردن محتوای قبلی
+</head>
 
-            snapshot.forEach((childSnapshot) => {
-                const product = childSnapshot.val();
-                const productId = childSnapshot.key;
+<body>
 
-                // اطمینان از وجود نام و قیمت قبل از ایجاد عنصر
-                if (product && typeof product.name !== 'undefined' && typeof product.price !== 'undefined') {
-                    const productElement = document.createElement('div');
-                    productElement.className = 'product-card';
+    <!-- Navbar -->
 
-                    // اضافه کردن جزئیات بیشتر بر اساس نوع محصول
-                    let detailsHtml = '';
-                    if (product.description) {
-                        detailsHtml += `<p><strong>توضیحات:</strong> ${product.description}</p>`;
-                    }
-                    if (product.type) {
-                        detailsHtml += `<p><strong>نوع:</strong> ${product.type}</p>`;
-                    }
-                    if (product.effect) {
-                        detailsHtml += `<p><strong>تأثیر:</strong> ${product.effect}</p>`;
-                    }
+    <header class="navbar">
 
-                    // دکمه مربوط به هر محصول (مثلا اضافه کردن به سبد)
-                    const buttonAction = productType === 'rank' ? 'selectRank' : 'addItemToCart';
-                    const buttonText = productType === 'rank' ? 'انتخاب رنک' : 'اضافه کردن';
+        <div class="logo">
+            LEGENDCRAFT
+        </div>
 
-                    productElement.innerHTML = `
-                        <h3>${product.name}</h3>
-                        <p>${formatPrice(product.price)}</p>
-                        ${detailsHtml}
-                        <button onclick="${buttonAction}('${productId}', '${product.name.replace(/'/g, "\\'")}', ${product.price})">
-                            ${buttonText}
-                        </button>
-                    `;
-                    targetDiv.appendChild(productElement);
-                    console.log(`Rendered ${productType}: ${product.name} (ID: ${productId})`);
-                } else {
-                    console.warn(`Skipping invalid product data. Path: ${refPath}, Key: ${productId}`, product);
-                }
-            });
-             if (targetDiv.children.length === 0) {
-                 targetDiv.innerHTML = '<div class="no-items-message">موردی برای نمایش وجود ندارد.</div>';
-             }
-        } else {
-            targetDiv.innerHTML = '<div class="no-items-message">هیچ موردی در این دسته یافت نشد.</div>';
-            console.log(`No items found at ${refPath}`);
-        }
-    }, (error) => {
-        console.error(`Error loading ${refPath}:`, error);
-        targetDiv.innerHTML = '<div class="error-message">خطا در بارگذاری اطلاعات. لطفاً بعداً تلاش کنید.</div>';
-    });
-}
+        <nav>
 
-// --- توابع مربوط به دکمه‌ها (می‌توانید این‌ها را گسترش دهید) ---
+            <ul>
 
-function selectRank(rankId, rankName, rankPrice) {
-    console.log(`Rank selected: ${rankName} (ID: ${rankId}, Price: ${rankPrice})`);
-    alert(`شما رنک ${rankName} را انتخاب کردید! (قیمت: ${formatPrice(rankPrice)})`);
-    // اینجا می‌توانید منطق اضافه کردن رنک به سبد خرید یا اعمال آن را اضافه کنید
-}
+                <li><a href="#home">خانه</a></li>
 
-function addItemToCart(itemId, itemName, itemPrice) {
-    console.log(`Item added to cart: ${itemName} (ID: ${itemId}, Price: ${itemPrice})`);
-    alert(`آیتم ${itemName} به سبد خرید شما اضافه شد!`);
-    // اینجا می‌توانید منطق اضافه کردن آیتم به سبد خرید واقعی را پیاده‌سازی کنید
-    // مثلاً: updateCart(itemId, itemName, itemPrice);
-}
+                <li><a href="#ranks">رنک ها</a></li>
 
-// --- بارگذاری اولیه بخش‌ها ---
-document.addEventListener('DOMContentLoaded', () => {
-    // بارگذاری رنک‌ها
-    loadProductSection('ranks', ranksListDiv, 'rank');
+                <li><a href="#items">آیتم ها</a></li>
 
-    // بارگذاری آیتم‌های کلیدی
-    loadProductSection('items', itemsListDiv, 'item');
-});
+                <li><a href="#stats">آمار</a></li>
+
+                <li><a href="#faq">سوالات</a></li>
+
+            </ul>
+
+        </nav>
+
+        <div class="cart-btn">
+
+            🛒 <span id="cart-count">0</span>
+
+        </div>
+
+    </header>
+
+    <!-- Hero -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>فروشگاه رسمی LegendCraft</h1>
+
+            <p>
+
+                خرید رنک، کلید، کوین و آیتم های اختصاصی سرور
+
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#ranks" class="btn primary">
+                    مشاهده رنک ها
+                </a>
+
+                <a href="#items" class="btn secondary">
+                    فروشگاه آیتم
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Ranks -->
+
+    <section class="section" id="ranks">
+
+        <h2 class="section-title">
+            رنک های ویژه
+        </h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>VIP</h3>
+
+                <p>کیت اختصاصی</p>
+
+                <p>دسترسی ویژه</p>
+
+                <span class="price">
+                    99 Toman
+                </span>
+
+                <button onclick="addToCart('VIP Rank')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>MVP</h3>
+
+                <p>پرواز</p>
+
+                <p>کیت حرفه ای</p>
+
+                <span class="price">
+                    199 Toman
+                </span>
+
+                <button onclick="addToCart('MVP Rank')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>ELITE</h3>
+
+                <p>تمام قابلیت های MVP</p>
+
+                <p>کلید رایگان روزانه</p>
+
+                <span class="price">
+                    299 Toman
+                </span>
+
+                <button onclick="addToCart('ELITE Rank')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>LEGEND</h3>
+
+                <p>بالاترین سطح</p>
+
+                <p>تمام امکانات سرور</p>
+
+                <span class="price">
+                    499 Toman
+                </span>
+
+                <button onclick="addToCart('LEGEND Rank')">
+                    خرید
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Items -->
+
+    <section class="section" id="items">
+
+        <h2 class="section-title">
+            آیتم های محبوب
+        </h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Diamond Kit</h3>
+
+                <span class="price">59 Toman</span>
+
+                <button onclick="addToCart('Diamond Kit')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Netherite Kit</h3>
+
+                <span class="price">129 Toman</span>
+
+                <button onclick="addToCart('Netherite Kit')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Spawner Pack</h3>
+
+                <span class="price">149 Toman</span>
+
+                <button onclick="addToCart('Spawner Pack')">
+                    خرید
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Crate Keys</h3>
+
+                <span class="price">39 Toman</span>
+
+                <button onclick="addToCart('Crate Keys')">
+                    خرید
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Stats -->
+
+    <section class="stats" id="stats">
+
+        <div class="stat-box">
+
+            <h3 id="players">0</h3>
+
+            <p>بازیکن آنلاین</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3 id="sales">0</h3>
+
+            <p>خرید موفق</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3 id="discord">0</h3>
+
+            <p>اعضای دیسکورد</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3>99.9%</h3>
+
+            <p>آپتایم</p>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section" id="faq">
+
+        <h2 class="section-title">
+            سوالات متداول
+        </h2>
+
+        <div class="faq-item">
+
+            <button class="faq-question">
+                خرید چگونه انجام می‌شود؟
+            </button>
+
+            <div class="faq-answer">
+                پس از پرداخت آیتم به صورت خودکار دریافت می‌شود.
+            </div>
+
+        </div>
+
+        <div class="faq-item">
+
+            <button class="faq-question">
+                آیا پرداخت امن است؟
+            </button>
+
+            <div class="faq-answer">
+                بله، تمامی پرداخت‌ها امن هستند.
+            </div>
+
+        </div>
+
+        <div class="faq-item">
+
+            <button class="faq-question">
+                بازگشت وجه وجود دارد؟
+            </button>
+
+            <div class="faq-answer">
+                فقط در شرایط خاص.
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Cart Modal -->
+
+    <div class="cart-modal" id="cartModal">
+
+        <div class="cart-content">
+
+            <h2>سبد خرید</h2>
+
+            <ul id="cart-items"></ul>
+
+            <button onclick="closeCart()">
+                بستن
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+
+    <footer>
+
+        <h3>LegendCraft Network</h3>
+
+        <p>
+            بهترین سرور ماینکرافت فارسی
+        </p>
+
+        <div class="footer-links">
+
+            <a href="#">Discord</a>
+
+            <a href="#">YouTube</a>
+
+            <a href="#">TikTok</a>
+
+            <a href="#">Support</a>
+
+        </div>
+
+        <p class="copyright">
+            © 2026 LegendCraft
+        </p>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
