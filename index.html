@@ -1,28 +1,50 @@
-// Function to fetch and display items
-function loadItems() {
-    const itemsRef = database.ref('products/items');
-    itemsRef.on('value', (snapshot) => {
-        // Check if snapshot has data before clearing and appending
-        if (snapshot.exists()) {
-            itemsListDiv.innerHTML = ''; // Clear loading message ONLY if data exists
-            snapshot.forEach((childSnapshot) => {
-                const item = childSnapshot.val();
-                const itemId = childSnapshot.key;
+function loadInventoryItems() {
+    const itemsRef = database.ref('products/items'); // فرض می‌کنیم همه آیتم‌ها اینجا هستند
+    const inventoryItemsDiv = document.getElementById('inventory-items-list'); // یک div جداگانه برای آیتم‌های مصرفی
 
+    itemsRef.on('value', (snapshot) => {
+        if (!snapshot.exists()) {
+            inventoryItemsDiv.innerHTML = '<p>هیچ آیتم مصرفی پیدا نشد.</p>';
+            return;
+        }
+
+        inventoryItemsDiv.innerHTML = ''; // پاک کردن پیام بارگذاری
+
+        snapshot.forEach((childSnapshot) => {
+            const item = childSnapshot.val();
+            const itemId = childSnapshot.key;
+
+            // فقط آیتم‌هایی که type آنها 'consumable' یا 'inventory_item' است را نمایش بده
+            if (item.type === 'consumable' || item.type === 'inventory_item') {
                 const itemElement = document.createElement('div');
                 itemElement.className = 'product-card';
                 itemElement.innerHTML = `
-                    <h3>${item.name}</h3>
-                    <p>${item.price.toLocaleString()} تومان</p>
-                    <button onclick="addItem('${itemId}', '${item.name}', ${item.price})">اضافه کردن</button>
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p>${item.price.toLocaleString()} تومان</p>
+                        <p>نوع: ${item.type}</p>
+                        ${item.effect ? `<p>تأثیر: ${item.effect}</p>` : ''}
+                    </div>
+                    <button onclick="addItemToInventory('${itemId}', '${item.name.replace(/'/g, "\\'")}', ${item.price})">
+                        اضافه کردن به انبار
+                    </button>
                 `;
-                itemsListDiv.appendChild(itemElement);
-            });
-        } else {
-            itemsListDiv.innerHTML = '<p>آیتمی برای نمایش وجود ندارد.</p>'; // Message if no items found
-        }
+                inventoryItemsDiv.appendChild(itemElement);
+            }
+        });
     }, (error) => {
-        console.error("Error loading items:", error);
-        itemsListDiv.innerHTML = '<p>خطا در بارگذاری آیتم‌ها.</p>';
+        console.error("Error loading inventory items:", error);
+        inventoryItemsDiv.innerHTML = '<p>خطا در بارگذاری آیتم‌های مصرفی.</p>';
     });
 }
+
+// تابع addItemToInventory باید جدا باشد از addItem برای رنک‌ها
+function addItemToInventory(itemId, itemName, itemPrice) {
+    // ... منطق اضافه کردن آیتم مصرفی به سبد خرید یا انبار ...
+    console.log(`Added to inventory: ${itemName} (${itemPrice} تومان)`);
+    // مثلاً: cart.inventory.push({ id: itemId, name: itemName, price: itemPrice });
+    updateCartUI();
+}
+
+// و در index.html باید یک <div id="inventory-items-list"></div> داشته باشی
+// همچنین تابع loadInventoryItems() را باید صدا بزنی.
