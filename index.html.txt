@@ -1,0 +1,32 @@
+index.html
+<!DOCTYPE html>
+        <html lang="fa" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>سرور ماینکرفت من</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: #f0f2f5;
+                    color: #333;
+                    text-align: center;
+                    padding: 50px 20px;
+                }
+                h1 {
+                    color: #1a73e8; /* رنگ آبی گوگل */
+                    margin-bottom: 20px;
+                }
+                p {
+                    font-size: 1.1em;
+                    line-height: 1.6;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>به سرور ماینکرفت من خوش آمدید!</h1>
+            <p>این صفحه محل معرفی سرور، قوانین، و اطلاعات مربوط به آن است.</p>
+            <p>به زودی جزئیات بیشتری اضافه خواهد شد.</p>
+            <p><em>با تشکر از همراهی شما!</em></p>
+        </body>
+        </html>
