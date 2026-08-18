@@ -2,162 +2,237 @@
 <html lang="fa" dir="rtl">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LegendCraft Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه نساجی بزرگمهر</title>
 
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- فونت -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- آیکون -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
 
-<div class="bg-animation"></div>
+    <!-- هدر -->
 
-<header>
-  <div class="logo">LEGENDCRAFT</div>
+    <header>
 
-  <nav>
-    <a href="#home">خانه</a>
-    <a href="#ranks">رنک ها</a>
-    <a href="#items">آیتم ها</a>
-    <a href="#faq">FAQ</a>
-  </nav>
+        <div class="logo">
+            🧵 بزرگمهر
+        </div>
 
-  <div class="cart">
-    🛒 <span id="cartCount">0</span>
-  </div>
-</header>
+        <nav>
 
-<section class="hero" id="home">
+            <a href="#home">خانه</a>
 
-  <h1>بهترین سرور ماینکرافت فارسی</h1>
+            <a href="#about">درباره ما</a>
 
-  <p>
-    خرید رنک، کلید، کوین و آیتم های اختصاصی
-  </p>
+            <a href="#products">محصولات</a>
 
-  <a href="#ranks" class="hero-btn">
-    شروع خرید
-  </a>
+            <a href="#contact">تماس با ما</a>
 
-</section>
+        </nav>
 
-<section id="ranks">
+    </header>
 
-  <h2>رنک های ویژه</h2>
 
-  <div class="grid">
 
-    <div class="card">
-      <h3>VIP</h3>
-      <p>دسترسی ویژه</p>
-      <span>99 T</span>
-      <button onclick="addCart('VIP')">خرید</button>
-    </div>
+    <!-- صفحه اصلی -->
 
-    <div class="card">
-      <h3>MVP</h3>
-      <p>پرواز + کیت</p>
-      <span>199 T</span>
-      <button onclick="addCart('MVP')">خرید</button>
-    </div>
+    <section class="hero" id="home">
 
-    <div class="card">
-      <h3>ELITE</h3>
-      <p>کلید رایگان</p>
-      <span>299 T</span>
-      <button onclick="addCart('ELITE')">خرید</button>
-    </div>
+        <div class="overlay"></div>
 
-    <div class="card legend">
-      <h3>LEGEND</h3>
-      <p>تمام امکانات</p>
-      <span>499 T</span>
-      <button onclick="addCart('LEGEND')">خرید</button>
-    </div>
+        <div class="hero-content">
 
-  </div>
+            <h1>فروشگاه نساجی بزرگمهر</h1>
 
-</section>
+            <p>
 
-<section id="items">
+                عرضه کننده انواع پارچه های باکیفیت، پرده ای، مبلی،
+                لباسی و ملحفه ای با بهترین قیمت.
 
-  <h2>آیتم های محبوب</h2>
+            </p>
 
-  <div class="grid">
+            <a href="#products" class="btn">
 
-    <div class="card">
-      <h3>Diamond Kit</h3>
-      <span>59 T</span>
-      <button onclick="addCart('Diamond Kit')">خرید</button>
-    </div>
+                مشاهده محصولات
 
-    <div class="card">
-      <h3>Netherite Kit</h3>
-      <span>129 T</span>
-      <button onclick="addCart('Netherite Kit')">خرید</button>
-    </div>
+            </a>
 
-    <div class="card">
-      <h3>Spawner Pack</h3>
-      <span>149 T</span>
-      <button onclick="addCart('Spawner Pack')">خرید</button>
-    </div>
+        </div>
 
-    <div class="card">
-      <h3>Crate Keys</h3>
-      <span>39 T</span>
-      <button onclick="addCart('Crate Keys')">خرید</button>
-    </div>
+    </section>
 
-  </div>
 
-</section>
 
-<section class="stats">
+    <!-- درباره ما -->
 
-  <div>
-    <h3>528</h3>
-    <p>بازیکن آنلاین</p>
-  </div>
+    <section class="about" id="about">
 
-  <div>
-    <h3>25K+</h3>
-    <p>خرید موفق</p>
-  </div>
+        <h2>درباره فروشگاه</h2>
 
-  <div>
-    <h3>12K+</h3>
-    <p>عضو دیسکورد</p>
-  </div>
+        <p>
 
-</section>
+            فروشگاه نساجی بزرگمهر با هدف ارائه بهترین
+            پارچه های ایرانی و خارجی فعالیت می کند.
+            کیفیت، تنوع و رضایت مشتری مهم ترین
+            اولویت ما است.
 
-<section id="faq">
+        </p>
 
-  <h2>سوالات متداول</h2>
+    </section>
 
-  <div class="faq-box">
-    <h4>آیتم ها چگونه تحویل می شوند؟</h4>
-    <p>به صورت خودکار داخل بازی.</p>
-  </div>
 
-  <div class="faq-box">
-    <h4>پرداخت امن است؟</h4>
-    <p>بله.</p>
-  </div>
 
-</section>
 
-<footer>
+    <!-- محصولات -->
 
-  <h3>LegendCraft Network</h3>
+    <section class="products" id="products">
 
-  <p>play.legendcraft.net</p>
+        <h2>
 
-</footer>
+            محصولات
+
+        </h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800" alt="پارچه">
+
+                <h3>پارچه پرده ای</h3>
+
+                <p>
+
+                    مناسب منازل، هتل و سالن ها
+
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800" alt="پارچه">
+
+                <h3>پارچه مبلی</h3>
+
+                <p>
+
+                    کیفیت بالا و تنوع رنگ
+
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800" alt="پارچه">
+
+                <h3>پارچه لباسی</h3>
+
+                <p>
+
+                    مناسب انواع پوشاک
+
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800" alt="پارچه">
+
+                <h3>پارچه ملحفه ای</h3>
+
+                <p>
+
+                    نرم، لطیف و با دوام
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+    <!-- تماس -->
+
+    <section class="contact" id="contact">
+
+        <h2>
+
+            تماس با ما
+
+        </h2>
+
+        <p>
+
+            <i class="fa-solid fa-phone"></i>
+
+            09941399016
+
+        </p>
+
+        <a class="whatsapp"
+            href="https://wa.me/989941399016"
+            target="_blank">
+
+            <i class="fa-brands fa-whatsapp"></i>
+
+            ارتباط در واتساپ
+
+        </a>
+
+        <h3>
+
+            موقعیت فروشگاه
+
+        </h3>
+
+        <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=51.6977%2C32.6541%2C51.7017%2C32.6562&layer=mapnik&marker=32.65517750559501%2C51.699709849314736"
+            loading="lazy">
+        </iframe>
+
+    </section>
+
+
+
+
+    <!-- فوتر -->
+
+    <footer>
+
+        <p>
+
+            © 2026 فروشگاه نساجی بزرگمهر
+
+        </p>
+
+    </footer>
+
+
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
+```
