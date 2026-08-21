@@ -1,109 +1,59 @@
-// ===============================
-// فروشگاه نساجی بزرگمهر
-// script.js
-// ===============================
+// دکمه بازگشت به بالا
+const topBtn = document.getElementById("topBtn");
 
-// نمایش سال جاری در فوتر
-const footer = document.querySelector("footer p");
+window.onscroll = function () {
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        topBtn.style.display = "block";
+    } else {
+        topBtn.style.display = "none";
+    }
+};
 
-if (footer) {
-    footer.innerHTML = `© ${new Date().getFullYear()} فروشگاه نساجی بزرگمهر | تمامی حقوق محفوظ است.`;
-}
+topBtn.onclick = function () {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+};
 
-// انیمیشن ظاهر شدن بخش‌ها هنگام اسکرول
+// انیمیشن نمایش بخش‌ها هنگام اسکرول
 const sections = document.querySelectorAll("section");
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            entry.target.classList.add("show");
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
         }
     });
 }, {
     threshold: 0.15
 });
 
-sections.forEach(section => {
-    section.classList.add("hidden");
+sections.forEach((section) => {
+    section.style.opacity = "0";
+    section.style.transform = "translateY(50px)";
+    section.style.transition = "all 0.8s ease";
     observer.observe(section);
 });
 
-// هایلایت لینک منو هنگام اسکرول
-const navLinks = document.querySelectorAll("nav a");
+// افکت کوچک برای کارت‌های محصولات
+const cards = document.querySelectorAll(".card");
 
-window.addEventListener("scroll", () => {
-
-    let current = "";
-
-    sections.forEach(section => {
-        const top = section.offsetTop - 120;
-        const height = section.clientHeight;
-
-        if (scrollY >= top) {
-            current = section.getAttribute("id");
-        }
+cards.forEach((card) => {
+    card.addEventListener("mouseenter", () => {
+        card.style.transform = "translateY(-10px) scale(1.03)";
     });
 
-    navLinks.forEach(link => {
-        link.classList.remove("active");
-
-        if (link.getAttribute("href") === "#" + current) {
-            link.classList.add("active");
-        }
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "translateY(0) scale(1)";
     });
-
 });
 
-// اسکرول نرم
-navLinks.forEach(link => {
+// نمایش سال جاری در فوتر (در صورت وجود عنصر)
+const footer = document.querySelector("footer p");
 
-    link.addEventListener("click", function (e) {
-
-        e.preventDefault();
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        target.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    });
-
-});
-
-// پیام خوش‌آمدگویی
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-
-        console.log("به فروشگاه نساجی بزرگمهر خوش آمدید.");
-
-    }, 500);
-
-});
-```
-
-### یک تغییر کوچک در `style.css`
-
-برای اینکه انیمیشن‌های این فایل کار کنند، این کد را **آخر فایل `style.css`** اضافه کن:
-
-```css
-/* انیمیشن نمایش بخش‌ها */
-.hidden{
-    opacity:0;
-    transform:translateY(60px);
-    transition:all .8s ease;
-}
-
-.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-/* لینک فعال منو */
-nav a.active{
-    color:#d4af37;
-    border-bottom:2px solid #d4af37;
-    padding-bottom:4px;
-}
-```
+if (footer) {
+    const year = new Date().getFullYear();
+    footer.innerHTML = `© ${year} تمامی حقوق برای فروشگاه نساجی بزرگمهر محفوظ است.`;
+                                          }
